@@ -5,11 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bibliotherapy Lab BK</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
-        iframe { border: none; width: 100%; height: 100%; }
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: #f8fafc; font-family: 'Inter', sans-serif; }
+        #loader { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; color: #1e293b; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        iframe { border: none; width: 100%; height: 100%; display: none; }
+        #opera-notice { display: none; padding: 40px 20px; text-align: center; }
+        .btn-direct { display: inline-block; background: #2563eb; color: white; padding: 14px 28px; text-decoration: none; border-radius: 10px; font-weight: 600; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <iframe src="https://script.google.com/macros/s/AKfycbyYn76zxXXQ7pgsV-wSNoCHOIUH0BsHivtG2m0vNYXZ81D7p3-xDeG-uc-x-d4O6YyQ5g/exec"></iframe>
+
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>Menyiapkan ruang Bibliotherapy...</p>
+    </div>
+
+    <div id="opera-notice">
+        <h2>Opps! Browser Tidak Mendukung</h2>
+        <p>Tampaknya Anda menggunakan browser (seperti Opera Mini) yang tidak mendukung fitur bingkai web SANKALA.</p>
+        <a id="gasLinkManual" href="#" class="btn-direct">Buka SANKALA Secara Langsung</a>
+    </div>
+
+    <iframe id="mainFrame" src=""></iframe>
+
+    <script>
+        // MASUKKAN LINK /EXEC GOOGLE APPS SCRIPT ANDA DI SINI
+        const URL_ASLI_GAS = "https://script.google.com/macros/s/AKfycbyYn76zxXXQ7pgsV-wSNoCHOIUH0BsHivtG2m0vNYXZ81D7p3-xDeG-uc-x-d4O6YyQ5g/exec";
+
+        const loader = document.getElementById('loader');
+        const frame = document.getElementById('mainFrame');
+        const notice = document.getElementById('opera-notice');
+        const linkManual = document.getElementById('gasLinkManual');
+
+        // 1. Cek apakah pengguna pakai Opera Mini
+        const isOperaMini = (navigator.userAgent.indexOf('Opera Mini') > -1);
+
+        if (isOperaMini) {
+            // Jika Opera Mini, sembunyikan loading dan tampilkan petunjuk redirect
+            loader.style.display = 'none';
+            notice.style.display = 'block';
+            linkManual.href = URL_ASLI_GAS;
+            
+            // Otomatis redirect setelah 2 detik
+            setTimeout(() => {
+                window.location.href = URL_ASLI_GAS;
+            }, 2000);
+        } else {
+            // Jika browser normal, muat Iframe
+            frame.src = URL_ASLI_GAS;
+            frame.style.display = 'block';
+            
+            // Hilangkan loader setelah Iframe selesai dimuat
+            frame.onload = function() {
+                loader.style.display = 'none';
+            };
+        }
+    </script>
 </body>
 </html>
